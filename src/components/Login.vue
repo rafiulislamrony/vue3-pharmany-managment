@@ -5,16 +5,12 @@
         <img class="login-card__icon" src="/public/img/lock.png" alt="" />
         <h2>User Login</h2>
       </div>
-      <form action="#">
-        <label class="mt-3 block" for="">Email</label>
-        <input class="w-100" type="email" placeholder="Enter your email" />
+      <form action="#" @submit.prevent="handleSubmit">
+        <label class="mt-3 block" for="" >Email</label>
+        <input class="w-100" type="email" placeholder="Enter your email"  v-model="formData.email"/>
 
         <label class="mt-3 block" for="">Password</label>
-        <input
-          class="w-100"
-          type="password"
-          placeholder="Enter your password"
-        />
+        <input class="w-100" type="password" placeholder="Enter your password"  v-model="formData.password" />
 
         <button class="block loginbtn mt-3" type="submit">Login</button>
 
@@ -35,7 +31,32 @@
 </template>
 
 <script>
-export default {};
+
+export default {
+    data:() => ({
+        formData:{
+            email: "",
+            password: ""
+        }
+    }),
+    methods:{
+        handleSubmit(){ 
+            if(!this.formData.email){
+                alert("Email can not be empty.")
+                // TODO: show error message on tost
+                return;
+            }
+            if(!this.formData.password < 6){
+                alert("Password must be at lest 6 characters long!");
+                 // TODO: show error message on tost 
+                return;
+            } 
+            // TODO : Call Api
+        }
+    }
+};
+
+
 </script>
 
 <style scoped>
