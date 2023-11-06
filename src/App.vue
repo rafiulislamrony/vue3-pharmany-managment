@@ -1,9 +1,24 @@
 <template>
-  <h1> Pharmacy Management Project </h1>
+  
+  <login></login>
+
 </template>
 
+
+
 <script>
-export default {};
+import Login from "./components/Login.vue";
+
+export default {
+  components: {
+    Login
+  }
+};
 </script>
 
-<style> </style>
+
+
+
+<style> 
+
+</style>
