@@ -2,10 +2,22 @@
   <div class="login-page">
 
     <div class="login-card">
+      <div class="box" :class="{'box--right': movedToright}">  </div>
+      <button @click="movedToright = false">Move left</button>  
+      <button  @click="movedToright = true" class="ml-4">Move Right</button>
+      <hr>
+
+      <Transition class="showhide"> 
+      <div class="box1 mt-4" v-if="showing"></div> 
+     </Transition>
+     
+      <button @click="showing = !showing">Show /hide</button>  
+
+
       <div class="text-center">
         <img class="login-card__icon" src="/public/img/lock.png" alt="" />
         <h2>User Login</h2>
-      </div>
+      </div> 
       <form action="#" @submit.prevent="handleSubmit">
         <label class="mt-3 block" for="email" >Email</label>
         <input class="w-100" type="email" placeholder="Enter your email"  
@@ -34,6 +46,7 @@
         </div>
       </form>
     </div>
+
   </div>
 </template>
 
@@ -44,7 +57,9 @@ export default {
         formData:{
             email: "",
             password: ""
-        }
+        },
+        movedToright: false,
+        showing: false
     }),
     methods:{
         handleSubmit(){ 
@@ -106,7 +121,7 @@ export default {
   height: 55px;
   background-color: greenyellow;
   margin-bottom: 22px;
-  /* animation: showhide 1s ease-in; */
+   animation: showhide 1s ease-in; 
 }
 
 .login-page {
