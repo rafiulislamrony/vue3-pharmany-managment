@@ -3,8 +3,7 @@ import App from './App.vue'
 import mitt from 'mitt'
 const eventBus = mitt()
 
-
-import './assets/css/ayoflex.css';
+import "ayoflex/dist/ayoflex.min.css";
 import './assets/css/example.css';
 
 const app = createApp(App);
