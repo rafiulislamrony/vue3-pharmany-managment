@@ -1,25 +1,32 @@
 <template>
   <div class="login-page">
-
-    <div class="login-card">  
+    <div class="login-card">
       <div class="text-center">
         <img class="login-card__icon" src="/public/img/lock.png" alt="" />
         <h2>User Login</h2>
-      </div> 
+      </div>
       <form action="#" @submit.prevent="handleSubmit">
-        <label class="mt-3 block" for="email" >Email</label>
-        <input class="w-100" type="email" placeholder="Enter your email"  
-        v-model="formData.email" 
-        required
-        ref="email"/> 
+        <label class="mt-3 block" for="username">Username</label>
+        <input
+          class="w-100"
+          type="text"
+          placeholder="Enter your username"
+          v-model="formData.username"
+          required
+          ref="username"
+        />
 
         <label class="mt-3 block" for="password">Password</label>
-        <input class="w-100" type="password" placeholder="Enter your password"  
-        v-model="formData.password" 
-        required
-        ref="password"/>
-
-        <button class="block loginbtn mt-3" type="submit">Login</button>
+        <input
+          class="w-100"
+          type="password"
+          placeholder="Enter your password"
+          v-model="formData.password"
+          required
+          ref="password"
+        />
+        <p class="text-center mt-3" v-if="loggingIn">Logging in...</p>
+        <button class="block loginbtn mt-3" v-else type="submit">Login</button>
 
         <div class="d-flex jc-between mt-3">
           <div>
@@ -34,43 +41,67 @@
         </div>
       </form>
     </div>
-
   </div>
 </template>
 
 <script>
- 
+import axios from "axios";
+
 export default {
-    data:() => ({
-        formData:{
-            email: "",
-            password: ""
-        }, 
-    }),
-    methods:{
-        handleSubmit(){ 
-            if(!this.formData.email){ 
-                this.$eventBus.emit("toast", {
-                    type: "Error",
-                    message: "Email can not be empty." 
-                }); 
-                this.$refs.email.focus(); 
-                return;
-            }
-            if(!this.formData.password < 6){ 
-                this.$eventBus.emit("toast", {
-                    type: "Error",
-                    message: "Password must be at lest 6 characters long!"
-                }); 
-                this.$refs.password.focus(); 
-                return;
-            } 
-            // TODO : Call Api
-        }
-    }  
+  data: () => ({
+    formData: {
+      username: "",
+      password: "",
+    },
+  }),
+  methods: {
+    handleSubmit() {
+      if (!this.formData.username) {
+        this.$eventBus.emit("toast", {
+          type: "Error",
+          message: "username can not be empty.",
+        });
+        this.$refs.username.focus();
+        return;
+      }
+      if (this.formData.password.length < 6) {
+        this.$eventBus.emit("toast", {
+          type: "Error",
+          message: "Password must be at lest 6 characters long!",
+        });
+        this.$refs.password.focus();
+        return;
+      }
+      // TODO : Call Api
+      this.loggingIn = true;
+      axios
+        .post(
+          "https://api.rimoned.com/api/pharmacy-management/v1/login",
+          this.formData
+        )
+        .then((res) => {
+          console.log(res.data);
+          this.$eventBus.emit("toast", {
+            type: "Success",
+            message: res.data.message,
+          });
+        })
+        .catch((err) => {
+          let errorMessage = "Something went wrong";
+          if ((err, response)) {
+            errorMessage = err.response.data.message;
+          }
+          this.$eventBus.emit("toast", {
+            type: "Error",
+            message: errorMessage,
+          });
+        })
+        .finally(() => {
+          this.loggingIn = false;
+        });
+    },
+  },
 };
-
-
 </script>
 
 <style scoped>
@@ -78,18 +109,18 @@ export default {
   width: 100%;
 }
 
-.loginbtn{
-    width: 100%;
-    color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px 10px;
-    border-radius: 5px;
-    background: #550202;
-    font-size: 16px; 
+.loginbtn {
+  width: 100%;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background: #550202;
+  font-size: 16px;
 }
- 
+
 .login-page {
   position: fixed;
   top: 0;
@@ -119,5 +150,5 @@ export default {
 
 .login-card__icon {
   max-width: 77px;
-} 
+}
 </style>
