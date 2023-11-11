@@ -1,3 +1,36 @@
 <template>
-    <h2>Vendors</h2>
+  <div class="d-flex jc-between ai-center">
+    <h2>All vendors</h2>
+    <TheButton>Add New</TheButton>
+  </div>
+  <table class="mt-4">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr v-for="i in 9" :key="i">
+            <td>Rafi</td>
+            <td>Description</td>
+            <td>
+                <img src="/img/edit.png" alt="" class="action-icon">
+                <img src="/img/trash.png" alt="" class="action-icon action-icon--delete ml-3">
+            </td>
+        </tr>
+
+    </tbody>
+  </table>
 </template>
+
+<script>
+import TheButton from '../../components/TheButton.vue';
+export default {
+    components:{
+        TheButton
+    }
+} 
+</script>
