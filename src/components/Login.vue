@@ -25,8 +25,9 @@
           required
           ref="password"
         />
-        <p class="text-center mt-3" v-if="loggingIn">Logging in...</p>
-        <button class="block loginbtn mt-3" v-else type="submit">Login</button>
+        <!-- <p class="text-center mt-3" v-if="loggingIn">Logging in...</p> -->
+        <!-- <button class="block loginbtn mt-3" v-else type="submit">Login</button> -->
+        <TheButton :block="true" :loading="loggingIn" class="mt-3">Login</TheButton>
 
         <div class="d-flex jc-between mt-3">
           <div>
@@ -46,6 +47,7 @@
 
 <script>
 import axios from "axios";
+import TheButton from "./TheButton.vue";
 
 export default {
   data: () => ({
@@ -54,6 +56,9 @@ export default {
       password: "",
     },
   }),
+  components:{
+    TheButton
+  },
   methods: {
     handleSubmit() {
       if (!this.formData.username) {
