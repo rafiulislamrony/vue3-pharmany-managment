@@ -27,7 +27,9 @@
         />
         <!-- <p class="text-center mt-3" v-if="loggingIn">Logging in...</p> -->
         <!-- <button class="block loginbtn mt-3" v-else type="submit">Login</button> -->
-        <TheButton :block="true" :loading="loggingIn" class="mt-3">Login</TheButton>
+        <TheButton :block="true" :loading="loggingIn" class="mt-3"
+          >Login</TheButton
+        >
 
         <div class="d-flex jc-between mt-3">
           <div>
@@ -56,8 +58,8 @@ export default {
       password: "",
     },
   }),
-  components:{
-    TheButton
+  components: {
+    TheButton,
   },
   methods: {
     handleSubmit() {
@@ -94,7 +96,6 @@ export default {
           localStorage.setItem("accessToken", res.data.accessToken);
 
           this.$router.push("/dashboard");
-
         })
         .catch((err) => {
           let errorMessage = "Something went wrong";
