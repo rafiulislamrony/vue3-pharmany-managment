@@ -1,36 +1,47 @@
 <template>
   <div class="d-flex jc-between ai-center">
     <h2>All vendors</h2>
-    <TheButton>Add New</TheButton>
+    <TheButton @click="addModal = true">Add New</TheButton>
   </div>
   <table class="mt-4">
     <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Action</th>
-        </tr>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
     </thead>
     <tbody>
-
-        <tr v-for="i in 9" :key="i">
-            <td>Rafi</td>
-            <td>Description</td>
-            <td>
-                <img src="/img/edit.png" alt="" class="action-icon">
-                <img src="/img/trash.png" alt="" class="action-icon action-icon--delete ml-3">
-            </td>
-        </tr>
-
+      <tr v-for="i in 9" :key="i">
+        <td>Rafi</td>
+        <td>Description</td>
+        <td>
+          <img src="/img/edit.png" alt="" class="action-icon" />
+          <img
+            src="/img/trash.png"
+            alt=""
+            class="action-icon action-icon--delete ml-3"
+          />
+        </td>
+      </tr>
     </tbody>
   </table>
+
+  <TheModal v-model="addModal" heading="Add New Vendor">
+    <h2>Enter Vendor Details</h2>
+  </TheModal>
 </template>
 
 <script>
-import TheButton from '../../components/TheButton.vue';
+import TheButton from "../../components/TheButton.vue";
+import TheModal from "../../components/TheModal.vue";
 export default {
-    components:{
-        TheButton
-    }
-} 
+  data: () => ({
+    addModal: false,
+  }),
+  components: {
+    TheButton,
+    TheModal,
+  },
+};
 </script>
