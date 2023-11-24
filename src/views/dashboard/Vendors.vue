@@ -2,7 +2,7 @@
   <div class="d-flex jc-between ai-center">
     <h2>All vendors</h2>
     <TheButton @click="addModal = true">Add New</TheButton>
-  </div> 
+  </div>
   <div class="text-center" v-if="gettingVendors">Loading...</div>
 
   <table class="mt-4" v-else>
@@ -18,12 +18,24 @@
         <td>{{ vendor.name }}</td>
         <td>{{ vendor.description }}</td>
         <td>
-          <img src="/img/edit.png" alt="" class="action-icon" 
-          @click="selectedVendor=vendor; 
-          editModal=true"
+          <img
+            src="/img/edit.png"
+            alt=""
+            class="action-icon"
+            @click="
+              selectedVendor = vendor;
+              editModal = true;
+            "
           />
-
-          <img src="/img/trash.png" alt="" class="action-icon action-icon--delete ml-3" @click="selectedVendor=vendor ; deleteModal=true" />
+          <img
+            src="/img/trash.png"
+            alt=""
+            class="action-icon action-icon--delete ml-3"
+            @click="
+              selectedVendor = vendor;
+              deleteModal = true;
+            "
+          />
         </td>
       </tr>
     </tbody>
@@ -51,7 +63,6 @@
     </form>
   </TheModal>
 
-
   <TheModal v-model="editModal" heading="Edit vendor">
     <form @submit.prevent="editVendor">
       <label class="block">Vendor Name</label>
@@ -70,28 +81,32 @@
         required
         v-model="selectedVendor.description"
       />
-      <the-button :loading="editing" class="w-100 mt-4"> Save Changes </the-button>
+      <the-button :loading="editing" class="w-100 mt-4">
+        Save Changes
+      </the-button>
     </form>
   </TheModal>
 
-
-
   <TheModal v-model="deleteModal" heading="Are you sure?">
-   <p>
-     Do you really want to delete?
-    <strong>{{ selectedVendor.name }}</strong>
-   </p>
-   <TheButton class="mt-4" @click="deleteVendor" :loading="deleting">Yes</TheButton>
-   <TheButton class="ml-3" color="gray" @click="deleteModal=false">No</TheButton>
+    <p>
+      Do you really want to delete?
+      <strong>{{ selectedVendor.name }}</strong>
+    </p>
+    <TheButton class="mt-4" @click="deleteVendor" :loading="deleting"
+      >Yes</TheButton
+    >
+    <TheButton class="ml-3" color="gray" @click="deleteModal = false"
+      >No</TheButton
+    >
   </TheModal>
-
 </template>
 
-<script>
-import axios from "axios";
+<script> 
 import TheButton from "../../components/TheButton.vue";
 import TheModal from "../../components/TheModal.vue";
 import { showErrorMessage, showSuccessMessage } from "../../utility/functions";
+import privateServices from "../../service/privateServices";
+
 export default {
   data: () => ({
     addModal: false,
@@ -101,9 +116,9 @@ export default {
       name: "",
       description: "",
     },
-    selectedVendor:{},
-    deleting:false,
-    editing:false,
+    selectedVendor: {},
+    deleting: false,
+    editing: false,
     adding: false,
     vendors: [],
     gettingVendors: false,
@@ -113,7 +128,8 @@ export default {
     TheModal,
   },
   mounted() {
-    this.getAllVendors();
+    setTimeout(this.getAllVendors, 100);
+    // this.getAllVendors();
   },
   methods: {
     resetForm() {
@@ -121,20 +137,15 @@ export default {
     },
     getAllVendors() {
       this.gettingVendors = true;
-      axios
-        .get(
-          "https://api.rimoned.com/api/pharmacy-management/v1//private/vendor",
-          {
-            headers: {
-              authorization: localStorage.getItem("accessToken"),
-            },
-          }
-        )
+
+      privateServices
+        .getVendors()
+
         .then((res) => {
           this.vendors = res.data;
         })
         .catch((err) => {
-          showErrorMessage(err); 
+          showErrorMessage(err);
         })
         .finally(() => {
           this.gettingVendors = false;
@@ -143,76 +154,52 @@ export default {
     addNew() {
       console.log(localStorage.getItem("accessToken"));
       this.adding = true;
-      axios
-        .post(
-          "https://api.rimoned.com/api/pharmacy-management/v1//private/vendor",
-          this.newVendor,
-          {
-            headers: {
-              authorization: localStorage.getItem("accessToken"),
-            },
-          }
-        )
-        .then((res) => { 
+      privateServices
+        .addVendor(this.newVendor)
+        .then((res) => {
           showSuccessMessage(res);
           this.addModal = false;
           this.resetForm();
           this.getAllVendors();
         })
         .catch((err) => {
-          showErrorMessage(err); 
+          showErrorMessage(err);
         })
         .finally(() => {
           this.adding = false;
         });
     },
-    editVendor(){ 
+    editVendor() {
       this.editing = true;
-      axios
-        .put(
-          "https://api.rimoned.com/api/pharmacy-management/v1//private/vendor/"+this.selectedVendor._id,
-          this.selectedVendor,
-          {
-            headers: {
-              authorization: localStorage.getItem("accessToken"),
-            },
-          }
-        )
-        .then((res) => { 
+      privateServices
+        .editVendor(this.selectedVendor)
+        .then((res) => {
           showSuccessMessage(res);
-          this.editModal = false;  
+          this.editModal = false;
         })
         .catch((err) => {
-          showErrorMessage(err); 
+          showErrorMessage(err);
         })
         .finally(() => {
           this.editing = false;
         });
     },
-    deleteVendor(){ 
+    deleteVendor() {
       this.deleting = true;
-      axios
-        .delete(
-          "https://api.rimoned.com/api/pharmacy-management/v1//private/vendor/"+this.selectedVendor._id,
-          {
-            headers: {
-              authorization: localStorage.getItem("accessToken"),
-            },
-          }
-        )
-        .then((res) => { 
+      privateServices
+        .deleteVendor(this.selectedVendor._id)
+        .then((res) => {
           showSuccessMessage(res);
-          this.deleteModal = false; 
+          this.deleteModal = false;
           this.getAllVendors();
         })
         .catch((err) => {
-          showErrorMessage(err); 
+          showErrorMessage(err);
         })
         .finally(() => {
           this.deleting = false;
         });
     },
-
   },
 };
 </script>

@@ -50,8 +50,8 @@
 <script>
 import axios from "axios";
 import TheButton from "../components/TheButton.vue";
-import { eventBus } from "../utility/eventBus";
 import { showErrorMessage, showSuccessMessage } from "../utility/functions";
+import { setPrivateHeaders } from "../service/axiosInstance";
 
 export default {
   data: () => ({
@@ -80,12 +80,14 @@ export default {
       // TODO : Call Api
       this.loggingIn = true;
       axios
-        .post("https://api.rimoned.com/api/pharmacy-management/v1/login",
+        .post(
+          "https://api.rimoned.com/api/pharmacy-management/v1/login",
           this.formData
         )
-        .then((res) => { 
+        .then((res) => {
           showSuccessMessage(res);
           localStorage.setItem("accessToken", res.data.accessToken);
+          setPrivateHeaders();
           this.$router.push("/dashboard");
         })
         .catch((err) => {
