@@ -50,6 +50,8 @@
 <script>
 import axios from "axios";
 import TheButton from "../components/TheButton.vue";
+import { eventBus } from "../utility/eventBus";
+import { showErrorMessage, showSuccessMessage } from "../utility/functions";
 
 export default {
   data: () => ({
@@ -64,48 +66,30 @@ export default {
   methods: {
     handleSubmit() {
       if (!this.formData.username) {
-        this.$eventBus.emit("toast", {
-          type: "Error",
-          message: "username can not be empty.",
-        });
+        showErrorMessage("Username can not be empty.");
         this.$refs.username.focus();
         return;
       }
+
       if (this.formData.password.length < 6) {
-        this.$eventBus.emit("toast", {
-          type: "Error",
-          message: "Password must be at lest 6 characters long!",
-        });
+        showErrorMessage("Password must be at lest 6 characters long!");
         this.$refs.password.focus();
         return;
       }
+
       // TODO : Call Api
       this.loggingIn = true;
       axios
-        .post(
-          "https://api.rimoned.com/api/pharmacy-management/v1/login",
+        .post("https://api.rimoned.com/api/pharmacy-management/v1/login",
           this.formData
         )
-        .then((res) => {
-          console.log(res.data);
-          this.$eventBus.emit("toast", {
-            type: "Success",
-            message: res.data.message,
-          });
-
+        .then((res) => { 
+          showSuccessMessage(res);
           localStorage.setItem("accessToken", res.data.accessToken);
-
           this.$router.push("/dashboard");
         })
         .catch((err) => {
-          let errorMessage = "Something went wrong";
-          if ((err, response)) {
-            errorMessage = err.response.data.message;
-          }
-          this.$eventBus.emit("toast", {
-            type: "Error",
-            message: errorMessage,
-          });
+          showErrorMessage(err);
         })
         .finally(() => {
           this.loggingIn = false;

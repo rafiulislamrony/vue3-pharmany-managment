@@ -56,6 +56,7 @@
 import axios from "axios";
 import TheButton from "../../components/TheButton.vue";
 import TheModal from "../../components/TheModal.vue";
+import { showErrorMessage, showSuccessMessage } from "../../utility/functions";
 export default {
   data: () => ({
     addModal: false,
@@ -93,16 +94,7 @@ export default {
           this.vendors = res.data;
         })
         .catch((err) => {
-          let errorMessage;
-          if (err.response.data.message) {
-            errorMessage = err.response?.data?.message;
-          } else {
-            errorMessage = "Something went wrong!";
-          }
-          this.$eventBus.emit("toast", {
-            type: "Error",
-            message: errorMessage,
-          });
+          showErrorMessage(err); 
         })
         .finally(() => {
           this.gettingVendors = false;
@@ -121,27 +113,14 @@ export default {
             },
           }
         )
-        .then((res) => {
-          console.log(res.data);
-          this.$eventBus.emit("toast", {
-            type: "Success",
-            message: res.data?.message,
-          });
+        .then((res) => { 
+          showSuccessMessage(res);
           this.addModal = false;
           this.resetForm();
+          this.getAllVendors();
         })
         .catch((err) => {
-          let errorMessage;
-          if (err.response.data.message) {
-            errorMessage = err.response?.data?.message;
-          } else {
-            errorMessage = "Something went wrong!";
-          }
-
-          this.$eventBus.emit("toast", {
-            type: "Error",
-            message: errorMessage,
-          });
+          showErrorMessage(err); 
         })
         .finally(() => {
           this.adding = false;
