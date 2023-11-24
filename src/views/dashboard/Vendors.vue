@@ -18,12 +18,12 @@
         <td>{{ vendor.name }}</td>
         <td>{{ vendor.description }}</td>
         <td>
-          <img src="/img/edit.png" alt="" class="action-icon" />
-          <img
-            src="/img/trash.png"
-            alt=""
-            class="action-icon action-icon--delete ml-3"
+          <img src="/img/edit.png" alt="" class="action-icon" 
+          @click="selectedVendor=vendor; 
+          editModal=true"
           />
+
+          <img src="/img/trash.png" alt="" class="action-icon action-icon--delete ml-3" @click="selectedVendor=vendor ; deleteModal=true" />
         </td>
       </tr>
     </tbody>
@@ -50,6 +50,41 @@
       <the-button :loading="adding" class="w-100 mt-4"> Add </the-button>
     </form>
   </TheModal>
+
+
+  <TheModal v-model="editModal" heading="Edit vendor">
+    <form @submit.prevent="editVendor">
+      <label class="block">Vendor Name</label>
+      <input
+        type="text"
+        placeholder="Enter vendor name"
+        class="mt-1 w-100"
+        required
+        v-model="selectedVendor.name"
+      />
+      <label class="block mt-3">Description</label>
+      <input
+        type="text"
+        placeholder="Write Short Description"
+        class="mt-31 w-100"
+        required
+        v-model="selectedVendor.description"
+      />
+      <the-button :loading="editing" class="w-100 mt-4"> Save Changes </the-button>
+    </form>
+  </TheModal>
+
+
+
+  <TheModal v-model="deleteModal" heading="Are you sure?">
+   <p>
+     Do you really want to delete?
+    <strong>{{ selectedVendor.name }}</strong>
+   </p>
+   <TheButton class="mt-4" @click="deleteVendor" :loading="deleting">Yes</TheButton>
+   <TheButton class="ml-3" color="gray" @click="deleteModal=false">No</TheButton>
+  </TheModal>
+
 </template>
 
 <script>
@@ -60,10 +95,15 @@ import { showErrorMessage, showSuccessMessage } from "../../utility/functions";
 export default {
   data: () => ({
     addModal: false,
+    deleteModal: false,
+    editModal: false,
     newVendor: {
       name: "",
       description: "",
     },
+    selectedVendor:{},
+    deleting:false,
+    editing:false,
     adding: false,
     vendors: [],
     gettingVendors: false,
@@ -126,6 +166,53 @@ export default {
           this.adding = false;
         });
     },
+    editVendor(){ 
+      this.editing = true;
+      axios
+        .put(
+          "https://api.rimoned.com/api/pharmacy-management/v1//private/vendor/"+this.selectedVendor._id,
+          this.selectedVendor,
+          {
+            headers: {
+              authorization: localStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((res) => { 
+          showSuccessMessage(res);
+          this.editModal = false;  
+        })
+        .catch((err) => {
+          showErrorMessage(err); 
+        })
+        .finally(() => {
+          this.editing = false;
+        });
+    },
+    deleteVendor(){ 
+      this.deleting = true;
+      axios
+        .delete(
+          "https://api.rimoned.com/api/pharmacy-management/v1//private/vendor/"+this.selectedVendor._id,
+          {
+            headers: {
+              authorization: localStorage.getItem("accessToken"),
+            },
+          }
+        )
+        .then((res) => { 
+          showSuccessMessage(res);
+          this.deleteModal = false; 
+          this.getAllVendors();
+        })
+        .catch((err) => {
+          showErrorMessage(err); 
+        })
+        .finally(() => {
+          this.deleting = false;
+        });
+    },
+
   },
 };
 </script>

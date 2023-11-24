@@ -1,5 +1,6 @@
 <template>
-  <div class="the-button" :class="{ 'the-button--block': block }">
+
+  <div class="the-button" :class="{ 'the-button--block': block, 'the-button--gray':color==='gray'}">
     <button>
       <slot> </slot>
     </button>
@@ -7,6 +8,8 @@
         <img src="../../public/img/spinner.gif" alt="">
     </div>
   </div>
+
+
 </template>
 
 <script>
@@ -20,6 +23,10 @@ export default {
       type: Boolean,
       defoult: false,
     },
+    color:{
+      type:String,
+      default:"none"
+    }
   },
 };
 </script>
