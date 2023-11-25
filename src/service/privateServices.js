@@ -23,14 +23,20 @@ export default {
   },
 
   addDrug(payload) {
-    return axiosPrivate.post("/private/Drug", payload);
+    return axiosPrivate.post("/private/drug", payload);
   },
 
   editDrug(payload) {
-    return axiosPrivate.put("/private/Drug/" + payload._id, payload);
+    return axiosPrivate.put("/private/drug/" + payload._id, payload);
   },
 
   deleteDrug(id) {
-    return axiosPrivate.delete("/private/Drug/" + id);
+    return axiosPrivate.delete("/private/drug/" + id);
   },
+
+  searchDrug(searchString){
+    return axiosPrivate.post("/private/drug/search", {searchString:searchString});
+  }
+
+
 };
