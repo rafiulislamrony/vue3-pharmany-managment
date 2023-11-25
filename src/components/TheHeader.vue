@@ -6,7 +6,7 @@
         class="the-header__search"
         placeholder="Search..."
         @focus="searchFocused = true"
-        @blur="searchFocused = false"
+        @blur="handleBlur"
         v-model="searchString"
       />
 
@@ -16,8 +16,7 @@
             class="result-item"
             v-for="drug in drugs"
             :key="drug.name"
-            @click="handleClick(drug)"
-          >
+            @click="handleClick(drug)">
             <td>{{ drug.name }}</td>
             <td>{{ drug.weight }}</td>
             <td>{{ drug.vendor }}</td>
@@ -47,18 +46,72 @@
       </div>
     </div>
   </div>
+
+
+  <TheModal v-model="detailsModal" heading="Drug Details">
+    <div>
+      <table class="drug-details">
+        <tr>
+          <th>Name:</th>
+          <td>{{ selectedDrug.name }}</td>
+        </tr>
+        <tr>
+          <th>Type:</th>
+          <td>{{ selectedDrug.type }}</td>
+        </tr>
+
+        <tr>
+          <th>Weight:</th>
+          <td>{{ selectedDrug.weight }}</td>
+        </tr>
+
+        <tr>
+          <th>Vendor:</th>
+          <td>{{ selectedDrug.vendor }}</td>
+        </tr>
+
+        <tr>
+          <th>Price:</th>
+          <td>{{ selectedDrug.price }}</td>
+        </tr>
+
+        <tr>
+          <th>Available:</th>
+          <td>{{ selectedDrug.quantity }}</td>
+        </tr>
+
+        <tr>
+          <th>Quantity:</th>
+          <td><input type="number" v-model="quantity" ref="qtyInput" /></td>
+        </tr>
+      </table>
+
+      <TheButton @click="addToCart" class="w-100 mt-4">Add to cart</TheButton>
+    </div>
+  </TheModal>
+
 </template>
 
 <script>
 import privateServices from "../service/privateServices";
+import TheModal from './TheModal.vue';
+import TheButton from './TheButton.vue';
+import { showErrorMessage } from '../utility/functions';
 export default {
   data: () => ({
     showAvatar: false,
     searchString: "",
     drugs: [],
     searchFocused: false,
-    lastSearchTime:0
+    lastSearchTime:0,
+    detailsModal:false,
+    selectedDrug:{},
+    quantity:""
   }),
+  components:{
+    TheModal,
+    TheButton 
+  },
   methods: {
     logout() {
       localStorage.removeItem("accessToken");
@@ -78,6 +131,27 @@ export default {
           console.log(e);
         }); 
     },
+    handleClick(drug){
+      this.selectedDrug = drug;
+      this.detailsModal=true;
+    },
+    addToCart(){
+      console.log(this.selectedDrug);
+      console.log(this.quantity);
+      if(!this.quantity){
+        showErrorMessage("Please Enter Quantity");
+        this.$refs.qtyInput.focus();
+      }else{
+        console.log("Adding to cart");
+        this.detailsModal = false;
+        //Todo: impliment add to cart
+      }
+    },
+    handleBlur(){
+      setTimeout(() => {
+        this.searchFocused = false;
+      }, 200);
+    }
   },
   watch: {
     searchString(newValue) {
