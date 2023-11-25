@@ -22,10 +22,7 @@
             src="/img/edit.png"
             alt=""
             class="action-icon"
-            @click="
-              selectedVendor = vendor;
-              editModal = true;
-            "
+            @click="handelEdit(vendor)"
           />
           <img
             src="/img/trash.png"
@@ -63,29 +60,7 @@
     </form>
   </TheModal>
 
-  <TheModal v-model="editModal" heading="Edit vendor">
-    <form @submit.prevent="editVendor">
-      <label class="block">Vendor Name</label>
-      <input
-        type="text"
-        placeholder="Enter vendor name"
-        class="mt-1 w-100"
-        required
-        v-model="selectedVendor.name"
-      />
-      <label class="block mt-3">Description</label>
-      <input
-        type="text"
-        placeholder="Write Short Description"
-        class="mt-31 w-100"
-        required
-        v-model="selectedVendor.description"
-      />
-      <the-button :loading="editing" class="w-100 mt-4">
-        Save Changes
-      </the-button>
-    </form>
-  </TheModal>
+  <edit-vendor v-if="selectedVendor && editModal" :selectedVendor="selectedVendor" :editModal="editModal"/>
 
   <TheModal v-model="deleteModal" heading="Are you sure?">
     <p>
@@ -106,6 +81,7 @@ import TheButton from "../../components/TheButton.vue";
 import TheModal from "../../components/TheModal.vue";
 import { showErrorMessage, showSuccessMessage } from "../../utility/functions";
 import privateServices from "../../service/privateServices";
+import EditVendor from '../../components/models/EditVendor.vue';
 
 export default {
   data: () => ({
@@ -126,12 +102,17 @@ export default {
   components: {
     TheButton,
     TheModal,
+    EditVendor,
   },
   mounted() {
     setTimeout(this.getAllVendors, 100);
     // this.getAllVendors();
   },
   methods: {
+    handelEdit(vendor){
+      this.selectedVendor = vendor;
+      this.editModal = true;  
+    },
     resetForm() {
       this.newVendor = { name: "", description: "" };
     },
@@ -167,21 +148,6 @@ export default {
         })
         .finally(() => {
           this.adding = false;
-        });
-    },
-    editVendor() {
-      this.editing = true;
-      privateServices
-        .editVendor(this.selectedVendor)
-        .then((res) => {
-          showSuccessMessage(res);
-          this.editModal = false;
-        })
-        .catch((err) => {
-          showErrorMessage(err);
-        })
-        .finally(() => {
-          this.editing = false;
         });
     },
     deleteVendor() {
