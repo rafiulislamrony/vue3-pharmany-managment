@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <div class="dashboard__left">
-        <TheSidebar></TheSidebar>
+      <TheSidebar></TheSidebar>
     </div>
 
     <div class="dashboard__right">
@@ -13,10 +13,15 @@
       </div>
     </div>
 
-    <div class="dashboard__cart">
-      <div class="the-cart-container"></div>
+    <div
+      class="dashboard__cart"
+      :class="{ 'dashboard__cart--opened': cartOpened }"
+    >
+      <div class="the-cart-container">
+        <TheCart @close="cartOpened = false"></TheCart>
+      </div>
 
-      <div class="cart-arrow">
+      <div class="cart-arrow" @click="cartOpened = !cartOpened">
         <img src="/img/arrow.png" alt="" />
       </div>
     </div>
@@ -27,21 +32,26 @@
 import TheSidebar from "../components/TheSidebar.vue";
 import TheHeader from "../components/TheHeader.vue";
 import { setPrivateHeaders } from "../service/axiosInstance";
+import TheCart from '../components/TheCart.vue';
 
 export default {
+  data: () => ({
+    cartOpened:false
+  }),
   components: {
     TheSidebar,
-    TheHeader
+    TheHeader,
+    TheCart
   },
-  created(){
+  created() {
     const accessToken = localStorage.getItem("accessToken");
-    if(!accessToken){
-      location.href="/";
+    if (!accessToken) {
+      location.href = "/";
     }
   },
   mounted() {
     setPrivateHeaders();
-  } 
+  },
 };
 </script>
 

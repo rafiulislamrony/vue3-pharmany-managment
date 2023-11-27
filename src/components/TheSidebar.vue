@@ -11,12 +11,21 @@
         <router-link to="/dashboard/selling-history"> Selling History </router-link>
         <router-link to="/dashboard/settings">Setting</router-link>
       </div>
+      <hr>
+      {{ projectName }}
+      VisitCount: {{ visitCount }}
     </div>
   </div>
 </template>
 
 <script>
- 
+import {infoStore} from "../data/info"; 
+export default {
+  data: ()=>({
+    projectName: infoStore.projectName,
+    visitCount: infoStore.visitCount,
+  })
+}
 </script>
 
 <style>
