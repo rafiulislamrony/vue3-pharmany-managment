@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-("pinia");
+const products = JSON.parse(localStorage.getItem("products") || '{}');
 
 export const useCartStore = defineStore("cart", {
   state: () => ({
-    products: {},
+    products: products,
   }),
   getters: {
     totalPrice() {
