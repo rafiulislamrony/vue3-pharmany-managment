@@ -2,6 +2,8 @@
   <div class="login-page">
     <div class="login-card">
       <h2 class="text-center">{{ projectName }}</h2>
+      <h3 class="text-center">---{{ username }}---</h3>
+
       <div class="text-center">
         <img class="login-card__icon" src="/public/img/lock.png" alt="" />
         <h2>User Login</h2>
@@ -50,10 +52,12 @@
 
 <script>
 import axios from "axios";
+import { mapState, mapActions } from "pinia";
 import TheButton from "../components/TheButton.vue";
 import { showErrorMessage, showSuccessMessage } from "../utility/functions";
 import { setPrivateHeaders } from "../service/axiosInstance";
 import {infoStore} from "../data/info";
+import { useAuthStore } from "../store/authStore";
 
 export default {
   data: () => ({
@@ -66,10 +70,21 @@ export default {
     showing:false,
     projectName: infoStore.projectName
   }),
+  computed:{
+    ...mapState(useAuthStore, {
+      username: "username",
+      accessToken: "accessToken",
+      refreshToken: "refreshToken",
+      isLoggedIn: "isLoggedIn"
+    })
+  },
   components: {
     TheButton,
   },
   methods: {
+    ...mapActions(useAuthStore, {
+      login: "login"
+    }),
     handleSubmit() {
       if (!this.formData.username) {
         showErrorMessage("Username can not be empty.");
@@ -91,7 +106,8 @@ export default {
           this.formData
         )
         .then((res) => {
-          showSuccessMessage(res);
+          showSuccessMessage(res);  
+          this.login(res.data);
           localStorage.setItem("accessToken", res.data.accessToken);
           setPrivateHeaders();
           this.$router.push("/dashboard");
