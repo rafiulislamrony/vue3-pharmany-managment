@@ -1,7 +1,7 @@
 <template>
   <div class="the-cart">
     <div class="the-cart__heading">Cart Items</div>
-    
+
     <table>
       <tr>
         <th>Item</th>
@@ -18,16 +18,20 @@
         </th>
       </tr>
       <tr v-for="(item, key) in cartItems" :key="key">
-        <td>{{ item.name }} </td>
+        <td>{{ item.name }}</td>
         <td>{{ item.weight }}</td>
-        <td>{{ item.price }} </td>
+        <td>{{ item.price }}</td>
         <td>
-          <input class="qty-input" type="number" v-model="item.quantity"/>
+          <input class="qty-input" type="number" v-model="item.quantity" />
         </td>
-        <td class="text-right"> {{  item.price *  item.quantity }} </td>
+        <td class="text-right">{{ item.price * item.quantity }}</td>
         <td>
-          <img src="/img/trash.png" class="action-icon action-icon--delete-small" alt=""
-          @click="removeFromCart(item._id)" />
+          <img
+            src="/img/trash.png"
+            class="action-icon action-icon--delete-small"
+            alt=""
+            @click="removeFromCart(item._id)"
+          />
         </td>
       </tr>
       <tr>
@@ -40,7 +44,13 @@
       </tr>
     </table>
 
-    <TheButton class="w-100 mt-4">Checkout </TheButton>
+    <TheButton
+      class="w-100 mt-4"
+      v-if="!enteringCustomerInfo"
+      @click="enteringCustomerInfo = true"
+    >
+      Checkout
+    </TheButton>
 
     <div v-if="enteringCustomerInfo" class="mt-4">
       <label for="" class="block">Customer Name</label>
@@ -65,21 +75,51 @@
 </template>
 
 <script>
-import {mapState, mapActions} from "pinia";
+import { mapState, mapActions } from "pinia";
 import { useCartStore } from "../store/cartStore";
 import TheButton from "./TheButton.vue";
+import privateServices from "../service/privateServices";
+import { showErrorMessage, showSuccessMessage } from "../utility/functions";
 
 export default {
-  methods:{
-    ...mapActions(useCartStore,{
-      removeFromCart:"remove"
-    })
+  data: () => ({
+    phone: "",
+    customer: "",
+    enteringCustomerInfo: false,
+    confirming: false,
+  }),
+  methods: {
+    ...mapActions(useCartStore, {
+      removeFromCart: "remove",
+    }),
+    confirmNow() {
+      const orderData = {
+        customer: this.customer,
+        phone: this.phone,
+        cartItems: this.cartItems,
+      };
+      this.confirming = true;
+      privateServices
+        .sellDrug(orderData)
+        .then((res) => {
+          showSuccessMessage(res);
+          this.phone = "";
+          this.customer = "";
+          this.enteringCustomerInfo = false;
+          this.$router.push("/dashboard/selling-history");
+        })
+        .catch(err=>{
+          showErrorMessage(err);
+        }).finally(()=>{
+          this.confirming=false;
+        });
+    },
   },
-  computed:{
-    ...mapState(useCartStore,{
-      cartItems:"products",
-      totalPrice:"totalPrice"
-    })
+  computed: {
+    ...mapState(useCartStore, {
+      cartItems: "products",
+      totalPrice: "totalPrice",
+    }),
   },
   components: {
     TheButton,

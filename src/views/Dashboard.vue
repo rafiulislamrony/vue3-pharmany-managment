@@ -12,15 +12,12 @@
         <RouterView></RouterView>
       </div>
     </div>
-
     <div
       class="dashboard__cart"
-      :class="{ 'dashboard__cart--opened': cartOpened }"
-    >
+      :class="{ 'dashboard__cart--opened': cartOpened }">
       <div class="the-cart-container">
         <TheCart @close="cartOpened = false"></TheCart>
       </div>
-
       <div class="cart-arrow" @click="cartOpened = !cartOpened">
         <img src="/img/arrow.png" alt="" />
       </div>
