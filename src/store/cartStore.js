@@ -15,6 +15,9 @@ export const useCartStore = defineStore("cart", {
     },
   },
   actions: {
+    clearCart(){
+      this.products = {};
+    },
     add(payload) {
       console.log(payload);
       if (this.products[payload._id]) {
