@@ -6,7 +6,7 @@
   </h3>
   <button @click="increase">Count +</button>
   <p>
-    Username {{ username }}
+    username {{ username }}
   </p>
 </template>
 
@@ -20,9 +20,9 @@ export default {
     projectname: infoStore.projectName,
     visitCount: infoStore.visitCount,
   }),
-  computed: {
-    ...mapState(useAuthStore, {
-      username: "username"
+  computed:{
+    ...mapState(useAuthStore,{
+      username:"username", 
     })
   },
   methods: {

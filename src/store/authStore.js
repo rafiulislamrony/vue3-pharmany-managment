@@ -1,14 +1,15 @@
 import { defineStore } from "pinia";
+("pinia");
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
     username: "",
     accessToken: "",
-    refreshToken: ""
+    refreshToken: "",
   }),
   getters: {
-    isLoggedIn(state) {
-      return state.username && state.accessToken ? true : false;
+    isLoggedIn(state){
+        return state.username && state.accessToken ? true : false;
     }
   },
   actions: {
@@ -19,3 +20,5 @@ export const useAuthStore = defineStore("auth", {
     }
   }
 });
+
+

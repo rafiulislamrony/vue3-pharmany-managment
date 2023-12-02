@@ -52,12 +52,12 @@
 
 <script>
 import axios from "axios";
-import { mapState, mapActions } from "pinia";
+import {mapState, mapActions} from "pinia";
 import TheButton from "../components/TheButton.vue";
 import { showErrorMessage, showSuccessMessage } from "../utility/functions";
 import { setPrivateHeaders } from "../service/axiosInstance";
 import {infoStore} from "../data/info";
-import { useAuthStore } from "../store/authStore";
+import {useAuthStore} from "../store/authStore";
 
 export default {
   data: () => ({

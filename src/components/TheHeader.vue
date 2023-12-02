@@ -16,7 +16,8 @@
             class="result-item"
             v-for="drug in drugs"
             :key="drug.name"
-            @click="handleClick(drug)">
+            @click="handleClick(drug)"
+          >
             <td>{{ drug.name }}</td>
             <td>{{ drug.weight }}</td>
             <td>{{ drug.vendor }}</td>
@@ -46,7 +47,6 @@
       </div>
     </div>
   </div>
-
 
   <TheModal v-model="detailsModal" heading="Drug Details">
     <div>
@@ -89,7 +89,6 @@
       <TheButton @click="addToCart" class="w-100 mt-4">Add to cart</TheButton>
     </div>
   </TheModal>
-
 </template>
 
 <script>
@@ -97,6 +96,8 @@ import privateServices from "../service/privateServices";
 import TheModal from './TheModal.vue';
 import TheButton from './TheButton.vue';
 import { showErrorMessage } from '../utility/functions';
+import {mapActions} from "pinia";
+import {useCartStore} from "../store/cartStore";
 export default {
   data: () => ({
     showAvatar: false,
@@ -110,9 +111,12 @@ export default {
   }),
   components:{
     TheModal,
-    TheButton 
+    TheButton
   },
   methods: {
+    ...mapActions(useCartStore,{
+      addToCartStore: "add"
+    }),
     logout() {
       localStorage.removeItem("accessToken");
       location.href = "/";
@@ -129,7 +133,7 @@ export default {
         })
         .catch((e) => {
           console.log(e);
-        }); 
+        });
     },
     handleClick(drug){
       this.selectedDrug = drug;
@@ -143,8 +147,10 @@ export default {
         this.$refs.qtyInput.focus();
       }else{
         console.log("Adding to cart");
+        this.addToCartStore({ ...this.selectedDrug, quantity: this.quantity });
         this.detailsModal = false;
-        //Todo: impliment add to cart
+        this.quantity = 1;
+        this.searchString  = "";
       }
     },
     handleBlur(){
@@ -161,7 +167,7 @@ export default {
       } else {
         this.drugs = [];
       }
-    } 
+    }
   }
 };
 </script>

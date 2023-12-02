@@ -10,10 +10,7 @@
         <router-link to="/dashboard/vendors">Vendors</router-link>
         <router-link to="/dashboard/selling-history"> Selling History </router-link>
         <router-link to="/dashboard/settings">Setting</router-link>
-      </div>
-      <hr>
-      {{ projectName }}
-      VisitCount: {{ visitCount }}
+      </div> 
     </div>
   </div>
 </template>
