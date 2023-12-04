@@ -47,5 +47,7 @@ export default {
   deleteHistory(id) {
     return axiosPrivate.delete("/private/sell/" + id);
   }, 
-
+  getOverview() {
+    return axiosPrivate.get("/private/overview");
+  },
 };

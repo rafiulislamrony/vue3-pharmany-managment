@@ -2,7 +2,6 @@
   <div class="login-page">
     <div class="login-card">
       <h2 class="text-center">{{ projectName }}</h2>
-      <h3 class="text-center">---{{ username }}---</h3>
 
       <div class="text-center">
         <img class="login-card__icon" src="/public/img/lock.png" alt="" />
@@ -18,7 +17,6 @@
           required
           ref="username"
         />
-
         <label class="mt-3 block" for="password">Password</label>
         <input
           class="w-100"
@@ -28,9 +26,7 @@
           required
           ref="password"
         />
-        <!-- <p class="text-center mt-3" v-if="loggingIn">Logging in...</p> -->
-        <!-- <button class="block loginbtn mt-3" v-else type="submit">Login</button> -->
-        <TheButton :block="true" :loading="loggingIn" class="mt-3"
+        <TheButton :block="true" :loading="logginIn" class="mt-3"
           >Login</TheButton
         >
 
@@ -52,12 +48,12 @@
 
 <script>
 import axios from "axios";
-import {mapState, mapActions} from "pinia";
+import { mapState, mapActions } from "pinia";
 import TheButton from "../components/TheButton.vue";
 import { showErrorMessage, showSuccessMessage } from "../utility/functions";
 import { setPrivateHeaders } from "../service/axiosInstance";
-import {infoStore} from "../data/info";
-import {useAuthStore} from "../store/authStore";
+import { infoStore } from "../data/info";
+import { useAuthStore } from "../store/authStore";
 
 export default {
   data: () => ({
@@ -65,25 +61,25 @@ export default {
       username: "",
       password: "",
     },
-    logginIn:false,
-    movedToRight:false,
-    showing:false,
-    projectName: infoStore.projectName
+    logginIn: false,
+    movedToRight: false,
+    showing: false,
+    projectName: infoStore.projectName,
   }),
-  computed:{
+  computed: {
     ...mapState(useAuthStore, {
       username: "username",
       accessToken: "accessToken",
       refreshToken: "refreshToken",
-      isLoggedIn: "isLoggedIn"
-    })
+      isLoggedIn: "isLoggedIn",
+    }),
   },
   components: {
     TheButton,
   },
   methods: {
     ...mapActions(useAuthStore, {
-      login: "login"
+      login: "login",
     }),
     handleSubmit() {
       if (!this.formData.username) {
@@ -106,7 +102,7 @@ export default {
           this.formData
         )
         .then((res) => {
-          showSuccessMessage(res);  
+          showSuccessMessage(res);
           this.login(res.data);
           localStorage.setItem("accessToken", res.data.accessToken);
           setPrivateHeaders();

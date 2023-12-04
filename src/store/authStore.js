@@ -8,17 +8,16 @@ export const useAuthStore = defineStore("auth", {
     refreshToken: "",
   }),
   getters: {
-    isLoggedIn(state){
-        return state.username && state.accessToken ? true : false;
-    }
+    isLoggedIn(state) {
+      return state.username && state.accessToken ? true : false;
+    },
   },
   actions: {
     login(payload) {
       this.username = payload.username;
       this.accessToken = payload.accessToken;
       this.refreshToken = payload.refreshToken;
-    }
-  }
+    },
+  },
 });
-
 
