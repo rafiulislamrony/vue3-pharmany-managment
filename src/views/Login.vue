@@ -119,21 +119,25 @@ export default {
 };
 </script>
 
-<style scoped>
-.w-100 {
-  width: 100%;
+<style>
+.box {
+  width: 55px;
+  height: 55px;
+  background-color: greenyellow;
+  margin-bottom: 22px;
+  transition: all 0.5s;
 }
 
-.loginbtn {
-  width: 100%;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 10px;
-  border-radius: 5px;
-  background: #550202;
-  font-size: 16px;
+.box--right {
+  margin-left: 222px;
+}
+
+.box1 {
+  width: 55px;
+  height: 55px;
+  background-color: greenyellow;
+  margin-bottom: 22px;
+  /* animation: showhide 1s ease-in; */
 }
 
 .login-page {
@@ -165,5 +169,50 @@ export default {
 
 .login-card__icon {
   max-width: 77px;
+}
+
+@keyframes showhide {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.showhide-enter-active {
+  animation: showhide 1s ease-in;
+  /* transition: all 0.5s; */
+}
+.showhide-enter-from {
+  /* opacity: 0;
+  transform: scale(0.5); */
+}
+
+.showhide-enter-to {
+  /* opacity: 1;
+  transform: scale(1); */
+}
+
+.showhide-leave-active {
+  animation: showhide 1s ease-in reverse;
+  /* transition: all 0.5s; */
+}
+.showhide-leave-from {
+  /* opacity: 1;
+  transform: scale(1); */
+}
+
+.showhide-leave-to {
+  /* opacity: 0;
+  transform: scale(0.5); */
 }
 </style>
