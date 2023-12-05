@@ -57,6 +57,11 @@ export default {
   updateAccountSettings(payload) {
     return axiosPrivate.put("/private/account-settings", payload);
   },
-
+  getWebSettings() {
+    return axiosPrivate.get("/private/website-settings");
+  },
+  updateWebSettings(payload) {
+    return axiosPrivate.put("/private/website-settings", payload);
+  },
 };
 
