@@ -35,6 +35,8 @@ const routes = [
     
     ],
   },
+  // 404 route
+  { path: "/:catchAll(.*)", component: NotFoundPage }, // Replace NotFoundPage with the actual component you want to use for 404
 ];
 
 const router = createRouter({
