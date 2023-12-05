@@ -10,6 +10,7 @@ const Vendors = () => import("../views/dashboard/Vendors.vue");
 const Account = () => import("../views/dashboard/settings/Account.vue");
 const Website = () => import("../views/dashboard/settings/Website.vue");
 const Theme = () => import("../views/dashboard/settings/Theme.vue");
+import NotFoundPage from "../views/404.vue";
 
 const routes = [
   { path: "/", component: LoginPage },
