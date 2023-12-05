@@ -50,4 +50,13 @@ export default {
   getOverview() {
     return axiosPrivate.get("/private/overview");
   },
+  getAccountSettings() {
+    return axiosPrivate.get("/private/account-settings");
+  },
+
+  updateAccountSettings(payload) {
+    return axiosPrivate.put("/private/account-settings", payload);
+  },
+
 };
+
