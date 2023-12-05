@@ -39,7 +39,7 @@ const routes = [
 
 const router = createRouter({
   routes,
-  history: createWebHistory('/pharmacy'),
+  history: createWebHistory(),
 });
 
 // router.beforeEach((to, from) => {
