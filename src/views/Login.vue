@@ -41,6 +41,11 @@
             <a href="#">Forgot Password?</a>
           </div>
         </div>
+        <br>
+        <div>
+          <p><strong>Username</strong>: Rafiul</p>
+          <p><strong>Password</strong>: 123456</p>
+        </div>
       </form>
     </div>
   </div>
